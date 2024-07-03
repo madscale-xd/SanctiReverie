@@ -25,6 +25,12 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('gameover','../assets/images/img/gameover.png');
         this.load.image('retry','../assets/images/buttons/retry.png');
         this.load.image('stepback','../assets/images/buttons/stepback.png');
+        //gamewinscene
+        this.load.image('gamewin','../assets/images/img/gamewin.png');
+        this.load.image('retryblue','../assets/images/buttons/retryblue.png');
+        this.load.image('stepbackblue','../assets/images/buttons/stepbackblue.png');
+        this.load.image('proceedblue','../assets/images/buttons/proceedblue.png');
+        
     }
 
     create() {      //loading screen, transitions to Main Menu after the preloading
