@@ -10,7 +10,7 @@ var config = {
     type: Phaser.AUTO,
     width: 1500,
     height: 750,
-    scene: [PreloadScene, TestScene, MainMenuScene, CredScene, GameOverScene, ], //leftmost gets loaded FIRST
+    scene: [PreloadScene, TestScene, MainMenuScene, CredScene, GameOverScene], //leftmost gets loaded FIRST
     physics: {
         default: 'arcade',
         arcade: {

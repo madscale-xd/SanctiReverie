@@ -268,6 +268,7 @@ export default class TestScene extends Phaser.Scene {
         // Disable player movement
         this.isDashing = true;
         this.iKeyEnabled = false;
+        this.playerInvulnerable = true;
 
         // Apply dash velocity based on the player's current direction
         if (this.cdh == 'left') {
@@ -294,6 +295,11 @@ export default class TestScene extends Phaser.Scene {
                 playerContainer.body.setVelocityY(0);
             }
             this.isDashing = false; // Enable player movement again
+        }, [], this);
+
+        this.time.delayedCall(500, () => {
+            this.playerInvulnerable = false;
+            this.player.setAlpha(1);
         }, [], this);
 
         // Set a delayed callback to re-enable the ability after cooldown
