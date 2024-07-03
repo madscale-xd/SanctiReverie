@@ -9,13 +9,7 @@ export default class TestScene extends Phaser.Scene {
         this.iKeyEnabled = true;
         this.playerInvulnerable = false;
     }
-    preload(){
-        this.load.image('player', '../assets/images/spritesheets/sancti.png');
-        this.load.image('sword', '../assets/images/spritesheets/sword.png');
-        this.load.image('forest', '../assets/images/img/forest.png');
-        this.load.image('hitbox', '../assets/images/img/hitbox.png');
-        this.load.image('hitboxH', '../assets/images/img/hitboxH.png');
-    }
+    
     create(){
         this.add.image(-400, -250, 'forest').setScale(2).setOrigin(0);
 
@@ -67,25 +61,6 @@ export default class TestScene extends Phaser.Scene {
         yellowEnemy.setTint(0xffff00);
         yellowEnemy.color = ['yellow'];
         this.enemies.add(yellowEnemy);
-
-        // Create yellow enemy
-        let orangeEnemy = this.physics.add.sprite(1135, 360, 'player');
-        orangeEnemy.setImmovable(true);
-        orangeEnemy.setTint(0xFFA500);
-        orangeEnemy.color = ['yellow','red'];
-        this.enemies.add(orangeEnemy);
-
-        let violetEnemy = this.physics.add.sprite(1235, 360, 'player');
-        violetEnemy.setImmovable(true);
-        violetEnemy.setTint(0x8F00FF);
-        violetEnemy.color = ['blue','red'];
-        this.enemies.add(violetEnemy);
-
-        let greenEnemy = this.physics.add.sprite(1335, 360, 'player');
-        greenEnemy.setImmovable(true);
-        greenEnemy.setTint(0x00FF00);
-        greenEnemy.color = ['yellow','blue'];
-        this.enemies.add(greenEnemy);
 
         this.physics.add.overlap(this.weapon, this.enemies, this.handlePlayerEnemyOverlap, null, this);
         this.physics.add.overlap(this.hitboxes, this.enemies, this.handlePlayerEnemyOverlap, null, this);

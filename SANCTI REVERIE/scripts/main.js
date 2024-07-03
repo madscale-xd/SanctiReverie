@@ -1,12 +1,16 @@
 //sceneManager file
 
 import TestScene from '../scripts/scenes/testgame.js';
+import MainMenuScene from '../scripts/scenes/menuScene.js';
+import PreloadScene from '../scripts/scenes/preloadScene.js';
+import CredScene from './scenes/credScene.js';
+import GameOverScene from './scenes/gameover.js';
 
 var config = {
     type: Phaser.AUTO,
     width: 1500,
     height: 750,
-    scene: [TestScene], //leftmost gets loaded FIRST
+    scene: [PreloadScene, TestScene, MainMenuScene, CredScene, GameOverScene, ], //leftmost gets loaded FIRST
     physics: {
         default: 'arcade',
         arcade: {
