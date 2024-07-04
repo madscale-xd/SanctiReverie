@@ -8,7 +8,8 @@ export default class PreloadScene extends Phaser.Scene {
     
     preload(){
         //testgame
-        this.load.image('player', '../assets/images/spritesheets/sancti.png');
+        // this.load.image('player', '../assets/images/spritesheets/sancti.png');
+        this.load.spritesheet('player', '../assets/images/spritesheets/Sancti_Spritesheet.png', { frameWidth: 59, frameHeight: 86 });
         this.load.image('sword', '../assets/images/spritesheets/sword.png');
         this.load.image('forest', '../assets/images/img/forest.png');
         this.load.image('hitbox', '../assets/images/img/hitbox.png');
