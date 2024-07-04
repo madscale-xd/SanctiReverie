@@ -3,15 +3,18 @@
 import TestScene from '../scripts/scenes/testgame.js';
 import MainMenuScene from '../scripts/scenes/menuScene.js';
 import PreloadScene from '../scripts/scenes/preloadScene.js';
-import CredScene from './scenes/credScene.js';
-import GameOverScene from './scenes/gameover.js';
-import GameWinScene from './scenes/gamewin.js';
+import CredScene from '../scripts/scenes/credScene.js';
+import GameOverScene from '../scripts/scenes/gameover.js';
+import GameWinScene from '../scripts/scenes/gamewin.js';
+import Arena1Scene from '../scripts/scenes/arena1.js';
+import Arena2Scene from '../scripts/scenes/arena2.js';
+import ArenaBossScene from '../scripts/scenes/arenaBoss.js';
 
 var config = {
     type: Phaser.AUTO,
     width: 1500,
     height: 750,
-    scene: [PreloadScene, TestScene, MainMenuScene, CredScene, GameOverScene, GameWinScene], //leftmost gets loaded FIRST
+    scene: [PreloadScene, TestScene, MainMenuScene, CredScene, GameOverScene, GameWinScene, Arena1Scene, Arena2Scene, ArenaBossScene], //leftmost gets loaded FIRST
     physics: {
         default: 'arcade',
         arcade: {

@@ -30,7 +30,14 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('retryblue','../assets/images/buttons/retryblue.png');
         this.load.image('stepbackblue','../assets/images/buttons/stepbackblue.png');
         this.load.image('proceedblue','../assets/images/buttons/proceedblue.png');
-        
+        //arena 1 tilemap
+        this.load.image('arenaTile','./assets/images/tilemaps/arenatilemap.png');
+        this.load.tilemapTiledJSON('arena1','./assets/images/tilemaps/Arena1.json');
+        this.load.tilemapTiledJSON('arena2','./assets/images/tilemaps/Arena2.json');
+        this.load.tilemapTiledJSON('arenaBoss','./assets/images/tilemaps/ArenaBoss.json');
+        //arena 1
+        this.load.image('clouds','./assets/images/backgrounds/clouds.png');
+        this.load.image('mist','./assets/images/backgrounds/mist.png');
     }
 
     create() {      //loading screen, transitions to Main Menu after the preloading
@@ -46,6 +53,7 @@ export default class PreloadScene extends Phaser.Scene {
             this.loadingText.setAlpha(0);
         }, [], this);
 
+        //change this to test whichever stage
         this.time.delayedCall(3000, () => {
             this.loadingText.destroy();
             this.scene.start('MainMenuScene');
