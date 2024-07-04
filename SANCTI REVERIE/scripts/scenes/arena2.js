@@ -102,8 +102,45 @@ export default class Arena2Scene extends Phaser.Scene {
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'slashLeft',
+            frames: this.anims.generateFrameNumbers('slashLeft', { start: 4, end: 0}),
+            frameRate: 16,
+            repeat: 0
+        });
+
+
+        this.anims.create({
+            key: 'slashRight',
+            frames: this.anims.generateFrameNumbers('slashRight', { start: 0, end: 4 }),
+            frameRate: 16,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'slashDown',
+            frames: this.anims.generateFrameNumbers('slashDown', { start: 0, end: 4 }),
+            frameRate: 16,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'slashUp',
+            frames: this.anims.generateFrameNumbers('slashUp', { start: 4, end: 0 }),
+            frameRate: 16,
+            repeat: 0
+        });
+
         this.weapon = this.physics.add.sprite(30,0, 'sword').setScale(0.1).setOrigin(-0.1, -0.15);
         this.playerContainer.add(this.weapon);
+        this.slashLeft = this.physics.add.sprite(30,0, 'slashLeft').setScale(1.5).setOrigin(0.7, 0.2);
+        this.playerContainer.add(this.slashLeft);
+        this.slashRight = this.physics.add.sprite(30,0, 'slashRight').setScale(1.5).setOrigin(-0.55, 0.2);
+        this.playerContainer.add(this.slashRight);
+        this.slashUp = this.physics.add.sprite(30,0, 'slashUp').setScale(1.5).setOrigin(0.3, 0.75);
+        this.playerContainer.add(this.slashUp);
+        this.slashDown = this.physics.add.sprite(30,0, 'slashDown').setScale(1.5).setOrigin(0.3, -0.75);
+        this.playerContainer.add(this.slashDown);
 
         this.cursors = this.input.keyboard.createCursorKeys(); // Create cursor keys for input
         this.wasd = this.input.keyboard.addKeys('W,S,A,D'); // Add WASD keys
@@ -180,6 +217,14 @@ export default class Arena2Scene extends Phaser.Scene {
         this.mist1.y = scrollY + this.cameraHeight / 2;
         if (!this.isBouncing && !this.isDashing) {
             // Handle player movement
+            this.slashRight.x = this.player.x + 20;
+            this.slashLeft.x = this.player.x - 20;
+            this.slashDown.x = this.player.x
+            this.slashUp.x = this.player.x
+            this.slashRight.y = this.player.y
+            this.slashLeft.y = this.player.y
+            this.slashDown.y = this.player.y + 40;
+            this.slashUp.y = this.player.y - 40;
             if (this.cursors.left.isDown || this.wasd.A.isDown) {
                 this.playerContainer.body.setVelocityX(-180);
                 this.player.anims.play('moveLeft', true);
@@ -389,17 +434,22 @@ export default class Arena2Scene extends Phaser.Scene {
     createHitbox() {
         this.slashSFX.play();
         let hitbox;
-
+        
         if (this.currDir === 'left') {
-            hitbox = this.physics.add.sprite(this.playerContainer.body.x - 70, this.playerContainer.body.y, 'hitbox').setOrigin(0, 0.3).setScale(1.5);
+            hitbox = this.physics.add.sprite(this.playerContainer.body.x - 70, this.playerContainer.body.y, 'hitbox').setOrigin(0, 0.2).setScale(1.5).setVisible(false);
+            this.slashLeft.anims.play('slashLeft', true);
         } else if (this.currDir === 'right') {
-            hitbox = this.physics.add.sprite(this.playerContainer.body.x + 60, this.playerContainer.body.y, 'hitbox').setOrigin(0, 0.3).setScale(1.5);
+            hitbox = this.physics.add.sprite(this.playerContainer.body.x + 60, this.playerContainer.body.y, 'hitbox').setOrigin(0, 0.2).setScale(1.5).setVisible(false);
+            this.slashRight.anims.play('slashRight', true);
         } else if (this.currDir === 'up') {
-            hitbox = this.physics.add.sprite(this.playerContainer.body.x, this.playerContainer.body.y - 80, 'hitboxH').setOrigin(0.3, 0).setScale(1.5);
+            hitbox = this.physics.add.sprite(this.playerContainer.body.x, this.playerContainer.body.y - 80, 'hitboxH').setOrigin(0.3, 0.2).setScale(1.5).setVisible(false);
+            this.slashUp.anims.play('slashUp', true);
         } else if (this.currDir === 'down') {
-            hitbox = this.physics.add.sprite(this.playerContainer.body.x, this.playerContainer.body.y + 70, 'hitboxH').setOrigin(0.3, 0).setScale(1.5);
+            hitbox = this.physics.add.sprite(this.playerContainer.body.x, this.playerContainer.body.y + 70, 'hitboxH').setOrigin(0.3, -0.37).setScale(1.5).setVisible(false);
+            this.slashDown.anims.play('slashDown', true);
         } else {
-            hitbox = this.physics.add.sprite(this.playerContainer.body.x, this.playerContainer.body.y + 70, 'hitboxH').setOrigin(0.3, 0).setScale(1.5);
+            hitbox = this.physics.add.sprite(this.playerContainer.body.x, this.playerContainer.body.y + 70, 'hitboxH').setOrigin(0.3, -0.37).setScale(1.5).setVisible(false);
+            this.slashDown.anims.play('slashDown', true);
         }
 
         // Add hitbox to the container or group

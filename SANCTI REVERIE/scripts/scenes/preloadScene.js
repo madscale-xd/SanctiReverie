@@ -9,6 +9,10 @@ export default class PreloadScene extends Phaser.Scene {
     preload(){
         //testgame (player stuff)
         this.load.spritesheet('player', '../assets/images/spritesheets/Sancti_Spritesheet.png', { frameWidth: 59, frameHeight: 86 });
+        this.load.spritesheet('slashRight', '../assets/images/spritesheets/slashes/slashRight.png', { frameWidth: 48, frameHeight: 96 });
+        this.load.spritesheet('slashLeft', '../assets/images/spritesheets/slashes/slashLeft.png', { frameWidth: 48, frameHeight: 96 });
+        this.load.spritesheet('slashUp', '../assets/images/spritesheets/slashes/slashUp.png', { frameWidth: 96, frameHeight: 48 });
+        this.load.spritesheet('slashDown', '../assets/images/spritesheets/slashes/slashDown.png', { frameWidth: 96, frameHeight: 48 });
         this.load.image('sword', '../assets/images/spritesheets/sword.png');
         this.load.audio('dashSFX','../assets/audio/sfx/dashSFX.mp3');
         this.load.audio('slashSFX','../assets/audio/sfx/slashSFX.mp3');
