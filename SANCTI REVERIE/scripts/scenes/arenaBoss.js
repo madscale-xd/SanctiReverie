@@ -38,8 +38,47 @@ export default class ArenaBossScene extends Phaser.Scene {
         this.playerContainer = this.add.container(735, 360);
         this.physics.world.enable(this.playerContainer);
 
-        this.player = this.physics.add.sprite(0,0, 'player').setOrigin(-0.45, -0.2);
+        this.player = this.physics.add.sprite(0,0, 'player').setOrigin(-0.02, 0.15);
         this.playerContainer.add(this.player);
+
+        this.anims.create({
+            key: 'moveDown',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        // Create the animation for moving up
+        this.anims.create({
+            key: 'moveUp',
+            frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        // Create the animation for idle
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
+            frameRate: 6,
+            repeat: -1
+        });
+
+        // Create the animation for moving right
+        this.anims.create({
+            key: 'moveRight',
+            frames: this.anims.generateFrameNumbers('player', { start: 12, end: 15 }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        // Create the animation for moving left
+        this.anims.create({
+            key: 'moveLeft',
+            frames: this.anims.generateFrameNumbers('player', { start: 16, end: 19 }),
+            frameRate: 8,
+            repeat: -1
+        });
 
         this.weapon = this.physics.add.sprite(30,0, 'sword').setScale(0.1).setOrigin(-0.1, -0.15);
         this.playerContainer.add(this.weapon);
@@ -82,12 +121,26 @@ export default class ArenaBossScene extends Phaser.Scene {
 
             if (this.cursors.up.isDown || this.wasd.W.isDown) {
                 this.playerContainer.body.setVelocityY(-150);
+                if(this.cdh == 'right'){
+                    this.player.anims.play('moveRight', true);
+                }else if(this.cdh == 'left'){
+                    this.player.anims.play('moveLeft', true);
+                }else{
+                    this.player.anims.play('moveUp', true);
+                }
                 this.currDir = 'up';
                 this.cdv = 'up';
                 this.weapon.x = this.player.x;
                 this.weapon.y = this.player.y - 40;
             } else if (this.cursors.down.isDown || this.wasd.S.isDown) {
                 this.playerContainer.body.setVelocityY(150);
+                if(this.cdh == 'right'){
+                    this.player.anims.play('moveRight', true);
+                }else if(this.cdh == 'left'){
+                    this.player.anims.play('moveLeft', true);
+                }else{
+                    this.player.anims.play('moveDown', true);
+                }
                 this.currDir = 'down';
                 this.cdv = 'down';
                 this.weapon.x = this.player.x;

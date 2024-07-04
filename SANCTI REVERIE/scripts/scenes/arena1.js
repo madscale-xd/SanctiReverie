@@ -38,7 +38,7 @@ export default class Arena1Scene extends Phaser.Scene {
         this.playerContainer = this.add.container(735, 360);
         this.physics.world.enable(this.playerContainer);
 
-        this.player = this.physics.add.sprite(0,0, 'player').setOrigin(-0.45, -0.2);
+        this.player = this.physics.add.sprite(0,0, 'player').setOrigin(-0.02, 0.15);
         this.playerContainer.add(this.player);
 
         this.anims.create({
@@ -47,7 +47,7 @@ export default class Arena1Scene extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
-    
+
         // Create the animation for moving up
         this.anims.create({
             key: 'moveUp',
@@ -55,7 +55,7 @@ export default class Arena1Scene extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
-    
+
         // Create the animation for idle
         this.anims.create({
             key: 'idle',
@@ -63,7 +63,7 @@ export default class Arena1Scene extends Phaser.Scene {
             frameRate: 6,
             repeat: -1
         });
-    
+
         // Create the animation for moving right
         this.anims.create({
             key: 'moveRight',
@@ -71,7 +71,7 @@ export default class Arena1Scene extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
-    
+
         // Create the animation for moving left
         this.anims.create({
             key: 'moveLeft',
@@ -97,9 +97,12 @@ export default class Arena1Scene extends Phaser.Scene {
         //tilemap collisions
         this.layer2.setCollisionBetween(0, 200);
         this.physics.add.collider(this.playerContainer.body, this.layer2);
+
+        //enemy stuff
+        
     }
 
-    update() {
+    update(){
         if (!this.isBouncing && !this.isDashing) {
             // Handle player movement
             if (this.cursors.left.isDown || this.wasd.A.isDown) {
@@ -116,25 +119,39 @@ export default class Arena1Scene extends Phaser.Scene {
                 this.cdh = 'right';
                 this.weapon.x = this.player.x + 20;
                 this.weapon.y = this.player.y;
-            } else if (this.cursors.up.isDown || this.wasd.W.isDown) {
+            } else {
+                this.playerContainer.body.setVelocityX(0);
+                this.cdh = 'none';
+            }
+
+            if (this.cursors.up.isDown || this.wasd.W.isDown) {
                 this.playerContainer.body.setVelocityY(-150);
-                this.player.anims.play('moveUp', true);
+                if(this.cdh == 'right'){
+                    this.player.anims.play('moveRight', true);
+                }else if(this.cdh == 'left'){
+                    this.player.anims.play('moveLeft', true);
+                }else{
+                    this.player.anims.play('moveUp', true);
+                }
                 this.currDir = 'up';
                 this.cdv = 'up';
                 this.weapon.x = this.player.x;
                 this.weapon.y = this.player.y - 40;
             } else if (this.cursors.down.isDown || this.wasd.S.isDown) {
                 this.playerContainer.body.setVelocityY(150);
-                this.player.anims.play('moveDown', true);
+                if(this.cdh == 'right'){
+                    this.player.anims.play('moveRight', true);
+                }else if(this.cdh == 'left'){
+                    this.player.anims.play('moveLeft', true);
+                }else{
+                    this.player.anims.play('moveDown', true);
+                }
                 this.currDir = 'down';
                 this.cdv = 'down';
                 this.weapon.x = this.player.x;
                 this.weapon.y = this.player.y + 40;
             } else {
-                this.playerContainer.body.setVelocityX(0);
                 this.playerContainer.body.setVelocityY(0);
-                this.player.anims.play('idle', true);
-                this.cdh = 'none';
                 this.cdv = 'none';
             }
         }

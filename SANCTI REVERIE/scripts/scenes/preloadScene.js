@@ -7,10 +7,16 @@ export default class PreloadScene extends Phaser.Scene {
     
     
     preload(){
-        //testgame
-        // this.load.image('player', '../assets/images/spritesheets/sancti.png');
+        //testgame (player stuff)
         this.load.spritesheet('player', '../assets/images/spritesheets/Sancti_Spritesheet.png', { frameWidth: 59, frameHeight: 86 });
         this.load.image('sword', '../assets/images/spritesheets/sword.png');
+        this.load.audio('dashSFX','../assets/audio/sfx/dashSFX.mp3');
+        this.load.audio('slashSFX','../assets/audio/sfx/slashSFX.mp3');
+        this.load.audio('painSFX','../assets/audio/sfx/painSFX.mp3');
+        this.load.audio('fireballSFX','../assets/audio/sfx/fireballSFX.mp3');
+        this.load.audio('blueSFX','../assets/audio/sfx/blueSFX.mp3');
+        this.load.audio('redSFX','../assets/audio/sfx/redSFX.mp3');
+        this.load.audio('yellowSFX','../assets/audio/sfx/yellowSFX.mp3');
         this.load.image('forest', '../assets/images/img/forest.png');
         this.load.image('hitbox', '../assets/images/img/hitbox.png');
         this.load.image('hitboxH', '../assets/images/img/hitboxH.png');
@@ -31,14 +37,18 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('retryblue','../assets/images/buttons/retryblue.png');
         this.load.image('stepbackblue','../assets/images/buttons/stepbackblue.png');
         this.load.image('proceedblue','../assets/images/buttons/proceedblue.png');
-        //arena 1 tilemap
+        //arena tilemaps
         this.load.image('arenaTile','./assets/images/tilemaps/arenatilemap.png');
         this.load.tilemapTiledJSON('arena1','./assets/images/tilemaps/Arena1.json');
         this.load.tilemapTiledJSON('arena2','./assets/images/tilemaps/Arena2.json');
         this.load.tilemapTiledJSON('arenaBoss','./assets/images/tilemaps/ArenaBoss.json');
-        //arena 1
+        //arena 2
         this.load.image('clouds','./assets/images/backgrounds/clouds.png');
         this.load.image('mist','./assets/images/backgrounds/mist.png');
+        this.load.audio('playBGM','../assets/audio/bgm/playBGM.mp3');
+        //enemies
+        this.load.spritesheet('seraphim','./assets/images/spritesheets/enemies/seraphim.png', { frameWidth: 180, frameHeight: 129 });
+        this.load.spritesheet('seraProj','./assets/images/spritesheets/projectiles/seraproj.png', { frameWidth: 75, frameHeight: 75 });
     }
 
     create() {      //loading screen, transitions to Main Menu after the preloading

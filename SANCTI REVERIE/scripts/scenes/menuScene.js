@@ -32,7 +32,7 @@ export default class MainMenuScene extends Phaser.Scene {
         launch.setInteractive().on('pointerdown', () => {
             this.scene.pause();
             this.clickSFX.play();
-            this.scene.start('Arena1Scene');
+            this.scene.start('Arena2Scene');
         });
 
         //about button event listeners and interactivity (brings you to credits)

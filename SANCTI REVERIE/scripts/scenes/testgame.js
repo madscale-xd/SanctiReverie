@@ -135,7 +135,13 @@ export default class TestScene extends Phaser.Scene {
                 this.weapon.x = this.player.x + 20;
                 this.weapon.y = this.player.y;
                 this.player.anims.play('moveRight', true);
-            } else if (this.cursors.up.isDown || this.wasd.W.isDown) {
+            } else {
+                this.playerContainer.body.setVelocityX(0);
+                this.cdh = 'none';
+                this.player.anims.play('idle', true);
+            } 
+            
+            if (this.cursors.up.isDown || this.wasd.W.isDown) {
                 this.playerContainer.body.setVelocityY(-150);
                 this.currDir = 'up';
                 this.cdv = 'up';
