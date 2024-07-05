@@ -6,67 +6,77 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     create() {
-        //sfx
-        this.clickSFX = this.sound.add('clickSFX', { volume:0.8});
-        this.hoverSFX = this.sound.add('hoverSFX', { volume:0.8});
+        // sfx
+        this.clickSFX = this.sound.add('clickSFX', { volume: 0.8 });
+        this.hoverSFX = this.sound.add('hoverSFX', { volume: 0.8 });
         
-        this.add.image(0,0, 'forest').setOrigin(0).setScale(1.2);
-        this.add.image(780,0, 'forest').setOrigin(0).setScale(1.2);
+        // Set the background image to cover the entire scene
+        this.add.image(0, 0, 'mainMenuBackground').setOrigin(0);
 
-        //button setups
-        const launch = this.add.image(420, 520, 'launch').setScale(0.8);
-        const about = this.add.image(750, 520, 'about').setScale(0.8);
-        const exit = this.add.image(1080, 520, 'exit').setScale(0.8);
+        // Add the game title image
+        this.add.image(750, 200, 'gameTitle').setOrigin(0.5);
 
-        //launch button event listeners and interactivity (brings you to the actual game)
-        launch.setInteractive();
-        launch.on('pointerover', () => {
-            this.hoverSFX.play();
-            launch.setScale(0.9);   
-        });
-
-        launch.on('pointerout', function () {
-            launch.setScale(0.8); 
-        });
-
-        launch.setInteractive().on('pointerdown', () => {
-            this.scene.pause();
-            this.clickSFX.play();
-            this.scene.start('Arena2Scene');
-        });
-
-        //about button event listeners and interactivity (brings you to credits)
-         about.setInteractive();
-         about.on('pointerover', () => {
-            this.hoverSFX.play();
-            about.setScale(0.9); 
-        });
- 
-         about.on('pointerout', function () {
-            about.setScale(0.8); 
-         });
- 
-        about.setInteractive().on('pointerdown', () => {
-            this.scene.pause();
-            this.clickSFX.play();
-            this.scene.start('CredScene');
-        });
-
-        //exit button event listeners and interactivity (prompts an alert and exits the tab)
-          exit.setInteractive();
-          exit.on('pointerover', () => {
-            this.hoverSFX.play();
-            exit.setScale(0.9); 
-        });
-
-        exit.on('pointerout', function () {
-            exit.setScale(0.8); 
-        });
-
-        exit.setInteractive().on('pointerdown', () => {
-            this.clickSFX.play();
+        // Create buttons with hover states
+        this.createButton(750, 480, 'launch', 'launchhover', 'Arena2Scene');
+        this.createButton(750, 550, 'about', 'abouthover', 'CredScene');
+        this.createButton(750, 620, 'exit', 'exithover', null, () => {
             alert('That\'s the wrong way out, Mushy! NOOOOOOOOOO!!!');
             window.close();
         });
+
+        // Footer text
+        this.add.text(750, 700, 'Alcove Studios, 2024', {
+            fontSize: '18px',
+            fontFamily: 'antiquity',
+            fill: '#d7a04c',
+        }).setOrigin(0.5);
+    }
+
+    createButton(x, y, key, hoverKey, sceneKey, callback) {
+        const button = this.add.image(x, y, key).setOrigin(0.5);
+        const buttonHover = this.add.image(x, y, hoverKey).setOrigin(0.5).setVisible(false);
+
+        button.setInteractive();
+        button.on('pointerover', () => {
+            this.hoverSFX.play();
+            button.setVisible(false);
+            buttonHover.setVisible(true);
+        });
+
+        button.on('pointerout', () => {
+            button.setVisible(true);
+            buttonHover.setVisible(false);
+        });
+
+        button.on('pointerdown', () => {
+            this.clickSFX.play();
+            if (callback) {
+                callback();
+            } else if (sceneKey) {
+                this.scene.start(sceneKey);
+            }
+        });
+
+        buttonHover.setInteractive();
+        buttonHover.on('pointerover', () => {
+            this.hoverSFX.play();
+            button.setVisible(false);
+            buttonHover.setVisible(true);
+        });
+
+        buttonHover.on('pointerout', () => {
+            button.setVisible(true);
+            buttonHover.setVisible(false);
+        });
+
+        buttonHover.on('pointerdown', () => {
+            this.clickSFX.play();
+            if (callback) {
+                callback();
+            } else if (sceneKey) {
+                this.scene.start(sceneKey);
+            }
+        });
     }
 }
+

@@ -7,13 +7,20 @@
     </title>       
     <script src="./scripts/phaser.min.js" ></script>
     <script  type="module" src="./scripts/main.js"></script>
+
     <style>
-         body {
+        body {
             overflow-x: hidden; /*hide horizontal (bottom) scrollbar*/
             overflow-y: hidden; /*hide vertical (right side) scrollbar*/
+        }
+
+        @font-face {
+        font-family: "antiquity";
+        src: url("./assets/fonts/antiquity-print.ttf") format("truetype");
         }
     </style>
 </head>
 <body>
+    <div id="fontLoader" style="font-family: 'antiquity'; position: absolute; left: -1000px; visibility: hidden;">.</div>
 </body>
 </html>

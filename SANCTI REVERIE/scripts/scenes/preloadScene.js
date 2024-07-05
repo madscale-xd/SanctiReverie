@@ -25,9 +25,16 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('hitbox', '../assets/images/img/hitbox.png');
         this.load.image('hitboxH', '../assets/images/img/hitboxH.png');
         //menuscene
-        this.load.image('launch','../assets/images/buttons/launch.png');
-        this.load.image('about','../assets/images/buttons/about.png');
-        this.load.image('exit','../assets/images/buttons/exit.png');
+        this.load.image('mainMenuBackground', '../assets/images/ui/mainmenu(1500x750).png');
+        this.load.image('gameTitle', '../assets/images/ui/title.png');
+
+        this.load.image('launch', '../assets/images/ui/start.png');
+        this.load.image('launchhover', '../assets/images/ui/starthover.png');
+        this.load.image('about', '../assets/images/ui/about.png');
+        this.load.image('abouthover', '../assets/images/ui/abouthover.png');
+        this.load.image('exit', '../assets/images/ui/exit.png');
+        this.load.image('exithover', '../assets/images/ui/exithover.png');
+
         this.load.audio('clickSFX','../assets/audio/sfx/clickSFX.mp3');
         this.load.audio('hoverSFX','../assets/audio/sfx/hoverSFX.mp3');
         //credscene
