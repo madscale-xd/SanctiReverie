@@ -7,8 +7,11 @@ export default class Arena2Scene extends Phaser.Scene {
         this.uKeyEnabled = true;
         this.iKeyEnabled = true;
         this.playerInvulnerable = false;
-        this.SeraphimSpawnRate = 10000;
-        this.ThroneSpawnRate = 5000;
+        this.SeraphimSpawnRate = 100000;        
+        this.ThroneSpawnRate = 100000;
+        this.handSpawnRate = 100000;            //set to 500 at cutscene
+        this.controlsEnabled = true;
+        this.eligiusMovable = false;
     }
     create() {
         //tilemaps
@@ -176,8 +179,28 @@ export default class Arena2Scene extends Phaser.Scene {
         });
 
         this.time.addEvent({
+            delay: this.handSpawnRate,
+            callback: this.handSpawn,
+            callbackScope: this,
+            loop: true
+        });
+
+        this.time.addEvent({
+            delay: 5000,
+            callback: this.spawnEligiusCutscene,
+            callbackScope: this
+        });
+
+        this.time.addEvent({
             delay: 1000,
             callback: this.enableColliders,
+            callbackScope: this,
+            loop: true
+        });
+
+        this.time.addEvent({
+            delay: 1500,
+            callback: this.enableCollidersHands,
             callbackScope: this,
             loop: true
         });
@@ -239,6 +262,62 @@ export default class Arena2Scene extends Phaser.Scene {
         })
 
         this.anims.create({
+            key: 'eligiusIdle',
+            frames: this.anims.generateFrameNumbers('eligius', { start: 0, end: 3 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'eligiusSpell',
+            frames: this.anims.generateFrameNumbers('eligius', { start: 4, end: 12 }),
+            frameRate: 8,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'candleblue',
+            frames: this.anims.generateFrameNumbers('candleblue', { start: 0, end: 8 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'candlered',
+            frames: this.anims.generateFrameNumbers('candlered', { start: 0, end: 8 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'candleyellow',
+            frames: this.anims.generateFrameNumbers('candleyellow', { start: 0, end: 8 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'handAttack',
+            frames: this.anims.generateFrameNumbers('handAttack', { start: 0, end: 6 }),
+            frameRate: 7,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'bossOrb',
+            frames: this.anims.generateFrameNumbers('bossOrb', { start: 0, end: 7 }),
+            frameRate: 3,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'bossLaser',
+            frames: this.anims.generateFrameNumbers('bossLaser', { start: 0, end: 1 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
             key: 'proj',
             frames: this.anims.generateFrameNumbers('seraProj', { start: 0, end: 2 }),
             frameRate: 8,
@@ -260,6 +339,29 @@ export default class Arena2Scene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.seraProjs, (player, projectile) => {
                 this.playerBounce(this.playerContainer, projectile);
         });
+        
+        //eligius
+        this.eligius = this.physics.add.sprite(610, 540, 'eligius').setScale(1).setOrigin(-0.1, -0.15).setActive(false).setVisible(false);
+        this.eligius.anims.play('eligiusIdle');
+
+        this.orbs = this.physics.add.group({
+            key: 'bossOrb',
+            repeat: 11,
+            setXY: { x: Phaser.Math.Between(20, 100), y:  Phaser.Math.Between(80, 150), stepX: Phaser.Math.Between(130,180) }
+        });
+
+        this.orbs.children.iterate(function (orb) {
+            orb.play('bossOrb');
+        });
+
+        this.Hands = this.physics.add.group();
+
+        // Time interval for changing direction (in milliseconds)
+        this.changeDirectionInterval = 2000; // Change direction every 1 second
+
+        // Timer to track when to change direction
+        this.timeSinceLastChange = 0;
+        this.maxDistance = 300;
 
         //audio files
         this.dashSFX = this.sound.add('dashSFX', {volume: 0.7});
@@ -270,10 +372,12 @@ export default class Arena2Scene extends Phaser.Scene {
         this.redSFX = this.sound.add('redSFX', {volume: 1.2});
         this.yellowSFX = this.sound.add('yellowSFX', {volume: 1.2});
         this.playBGM = this.sound.add('playBGM', {volume: 0.4, loop:true});
+        this.bossBGM = this.sound.add('bossBGM', {volume: 0.4, loop:true});
+        this.destructionSFX = this.sound.add('destructionSFX', {volume: 0.4});
         this.playBGM.play();
     }
 
-    update(){
+    update(time, delta){
          // Set clouds position based on camera scroll
         const scrollX = this.cameras.main.scrollX;
         const scrollY = this.cameras.main.scrollY;
@@ -283,7 +387,7 @@ export default class Arena2Scene extends Phaser.Scene {
         this.clouds.y = scrollY + this.cameraHeight / 2;
         this.mist1.x = scrollX + this.cameraWidth / 2;
         this.mist1.y = scrollY + this.cameraHeight / 2;
-        if (!this.isBouncing && !this.isDashing) {
+        if (!this.isBouncing && !this.isDashing && this.controlsEnabled) {
             // Handle player movement
             this.slashRight.x = this.player.x + 20;
             this.slashLeft.x = this.player.x - 20;
@@ -293,7 +397,7 @@ export default class Arena2Scene extends Phaser.Scene {
             this.slashLeft.y = this.player.y
             this.slashDown.y = this.player.y + 40;
             this.slashUp.y = this.player.y - 40;
-            if (this.cursors.left.isDown || this.wasd.A.isDown) {
+            if (this.cursors.left.isDown || this.wasd.A.isDown ) {
                 this.playerContainer.body.setVelocityX(-180);
                 this.player.anims.play('moveLeft', true);
                 this.currDir = 'left';
@@ -344,14 +448,14 @@ export default class Arena2Scene extends Phaser.Scene {
             }
         }
 
-        if (this.uiop.I.isDown && !this.isDashing && this.iKeyEnabled) {
+        if (this.uiop.I.isDown && !this.isDashing && this.iKeyEnabled && this.controlsEnabled) {
             this.playerDash(this.playerContainer);
             console.log(this.playerContainer.x, this.playerContainer.y);
         }
 
         // Handle JKL key presses to change tint with a cooldown
         const currentTime = this.time.now; // Get the current time
-        if (currentTime - this.lastColorChangeTime > 3000 ) { // Check if 3 seconds have passed
+        if (currentTime - this.lastColorChangeTime > 3000 && this.controlsEnabled) { // Check if 3 seconds have passed
             if (this.jkl.J.isDown  && this.currColor != 'blue') {
                 this.blueSFX.play();
                 this.weapon.setTint(0x0000ff); // Blue tint
@@ -382,7 +486,7 @@ export default class Arena2Scene extends Phaser.Scene {
             }
         }
 
-        if (this.uiop.U.isDown && this.uKeyEnabled) {
+        if (this.uiop.U.isDown && this.uKeyEnabled && this.controlsEnabled) {
             this.createHitbox();
         }
 
@@ -416,12 +520,50 @@ export default class Arena2Scene extends Phaser.Scene {
             }
         }, this);
 
+        this.Hands.children.each((hand) => {
+            hand.anims.play('handAttack', true);
+        })
+
          // Remove projectiles that are out of the screen
         this.seraProjs.children.each((projectile) => {
             if (projectile.y > 1200 || projectile.y < -400) { // Assuming the game height is 600
                 projectile.destroy();
             }
         }, this);
+
+        //eligius
+        this.timeSinceLastChange += delta;
+
+        // Check if it's time to change direction
+        if (this.timeSinceLastChange >= this.changeDirectionInterval && this.eligiusMovable == true) {
+            // Reset the timer
+            this.timeSinceLastChange = 0;
+
+            // Change direction with some randomness
+            if(this.eligiusMovable == true){
+                this.eligius.setVelocity(Phaser.Math.Between(-300, 300), Phaser.Math.Between(-300, 300));
+            }else{
+                this.eligius.setVelocity(0,0);
+            }
+        }
+
+        let distanceX = this.eligius.x - this.player.x;
+        let distanceY = this.eligius.y - this.player.y;
+
+        // Check if eligius is too far from the player
+        if (Math.abs(distanceX) > this.maxDistance || Math.abs(distanceY) > this.maxDistance) {
+            // Adjust position to stay within the max distance
+            if (Math.abs(distanceX) > this.maxDistance) {
+                this.eligius.x = this.player.x + (this.maxDistance * Math.sign(distanceX));
+            }
+            if (Math.abs(distanceY) > this.maxDistance) {
+                this.eligius.y = this.player.y + (this.maxDistance * Math.sign(distanceY));
+            }
+
+            // Change direction to move back towards the player
+            this.eligius.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
+        }
+
     }
 
     handlePlayerEnemyOverlap(player, enemy) {
@@ -858,6 +1000,69 @@ export default class Arena2Scene extends Phaser.Scene {
         this.Thrones.children.each((throne) => {
             this.physics.add.overlap(this.player, throne, () => {
                 this.playerBounce(this.playerContainer, throne);
+            }, null, this);
+        }, this);
+    }
+
+    spawnEligiusCutscene(){
+        if (!this.destructionSFXPlayed) {
+            this.destructionSFX.play();
+            this.destructionSFXPlayed = true;
+        }
+        const camera = this.cameras.main;
+        camera.shake(8000, 0.002);
+        this.controlsEnabled = false;
+        this.playBGM.stop();
+
+        this.time.delayedCall(8000, () => {
+            this.Seraphims.children.each((seraphim) => {
+                this.destroySeraphim(seraphim);
+            }, this);
+    
+            this.Thrones.children.each((throne) => {
+                this.destroyThrone(throne);
+            }, this);
+            this.bossBGM.play();
+            this.controlsEnabled = true;
+            this.eligius.setActive(true).setVisible(true);
+            this.eligiusMovable = true;
+            this.eligius.x = 507;
+            this.eligius.y = 570; 
+        })
+    }
+
+    handSpawn() {
+        let centerX;
+        let centerY;
+
+        // Randomly choose between different ranges
+        const randomChoice = Phaser.Math.Between(1, 2); // Example: choose between 1 to 4
+    
+        if (randomChoice === 1) {
+            centerY = Phaser.Math.Between(200,800); // Range 1
+            centerX = Phaser.Math.Between(200, 1300);
+        } else if (randomChoice === 2) {
+            centerY = Phaser.Math.Between(800, 1200); // Default or Range 4
+            centerX = Phaser.Math.Between(200, 1300);
+        }
+
+        const hand = this.Hands.create(centerX, centerY, 'handAttack').setOrigin(-0.02, 0.15).setScale(0.75);
+        hand.class = "hand";
+
+        hand.setActive(false).setAlpha(0.5);
+        this.time.delayedCall(1000, () => {
+          hand.setActive(true).setAlpha(1);
+        });
+
+        this.time.delayedCall(2100, () => {
+            hand.destroy();
+          });
+    }
+
+    enableCollidersHands(){
+        this.Hands.children.each((hand) => {
+            this.physics.add.overlap(this.player, hand, () => {
+                this.playerBounce(this.playerContainer, hand);
             }, null, this);
         }, this);
     }

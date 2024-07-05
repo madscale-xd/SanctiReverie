@@ -21,6 +21,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.audio('blueSFX','../assets/audio/sfx/blueSFX.mp3');
         this.load.audio('redSFX','../assets/audio/sfx/redSFX.mp3');
         this.load.audio('yellowSFX','../assets/audio/sfx/yellowSFX.mp3');
+        this.load.audio('destructionSFX','../assets/audio/sfx/destructionSFX.mp3');
         this.load.image('forest', '../assets/images/img/forest.png');
         this.load.image('hitbox', '../assets/images/img/hitbox.png');
         this.load.image('hitboxH', '../assets/images/img/hitboxH.png');
@@ -58,6 +59,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('clouds','./assets/images/backgrounds/clouds.png');
         this.load.image('mist','./assets/images/backgrounds/mist.png');
         this.load.audio('playBGM','../assets/audio/bgm/playBGM.mp3');
+        this.load.audio('bossBGM','../assets/audio/bgm/bossBGM.mp3');
         //enemies
         this.load.spritesheet('seraphim','./assets/images/spritesheets/enemies/Seraphim/seraphim.png', { frameWidth: 180, frameHeight: 129 });
         this.load.spritesheet('seraphimBlue','./assets/images/spritesheets/enemies/Seraphim/seraphimBlue.png', { frameWidth: 180, frameHeight: 129 });
@@ -68,6 +70,14 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('throneBlue','./assets/images/spritesheets/enemies/Throne/throneBlue.png', { frameWidth: 135, frameHeight: 129 });
         this.load.spritesheet('throneRed','./assets/images/spritesheets/enemies/Throne/throneRed.png', { frameWidth: 135, frameHeight: 129 });
         this.load.spritesheet('throneYellow','./assets/images/spritesheets/enemies/Throne/throneYellow.png', { frameWidth: 135, frameHeight: 129 });
+        this.load.spritesheet('eligius','./assets/images/spritesheets/enemies/Boss/eligius.png', { frameWidth: 225, frameHeight: 396 });
+        this.load.spritesheet('candleblue','./assets/images/spritesheets/enemies/Boss/Candle/candleblue.png', { frameWidth: 162, frameHeight: 240 });
+        this.load.spritesheet('candlered','./assets/images/spritesheets/enemies/Boss/Candle/candlered.png', { frameWidth: 162, frameHeight: 240 });
+        this.load.audio('destructionSFX','../assets/audio/sfx/destructionSFX.mp3');
+        this.load.spritesheet('candleyellow','./assets/images/spritesheets/enemies/Boss/Candle/candleyellow.png', { frameWidth: 162, frameHeight: 240 });
+        this.load.spritesheet('handAttack','./assets/images/spritesheets/enemies/Boss/HandAttack/BossHandSprite.png', { frameWidth: 132, frameHeight: 207 });
+        this.load.spritesheet('bossLaser','./assets/images/spritesheets/enemies/Boss/LaserAttack/BossLaserSheet.png', { frameWidth: 45, frameHeight: 975 });
+        this.load.spritesheet('bossOrb','./assets/images/spritesheets/enemies/Boss/LaserAttack/BossOrbSheet.png', { frameWidth: 75, frameHeight: 105 });
     }
 
     create() {      //loading screen, transitions to Main Menu after the preloading

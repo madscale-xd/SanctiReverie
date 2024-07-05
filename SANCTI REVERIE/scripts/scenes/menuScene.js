@@ -20,7 +20,7 @@ export default class MainMenuScene extends Phaser.Scene {
         this.createButton(750, 480, 'launch', 'launchhover', 'Arena2Scene');
         this.createButton(750, 550, 'about', 'abouthover', 'CredScene');
         this.createButton(750, 620, 'exit', 'exithover', null, () => {
-            alert('That\'s the wrong way out, Mushy! NOOOOOOOOOO!!!');
+            alert('The gates of Heaven are always open for you, Sancti.');
             window.close();
         });
 
