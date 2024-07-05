@@ -42,17 +42,25 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('stepbackblue','../assets/images/buttons/stepbackblue.png');
         this.load.image('proceedblue','../assets/images/buttons/proceedblue.png');
         //arena tilemaps
-        this.load.image('arenaTile','./assets/images/tilemaps/arenatilemap.png');
+        this.load.image('arenaTile','./assets/images/tilemaps/arenatilemapupdated.png');
         this.load.tilemapTiledJSON('arena1','./assets/images/tilemaps/Arena1.json');
         this.load.tilemapTiledJSON('arena2','./assets/images/tilemaps/Arena2.json');
         this.load.tilemapTiledJSON('arenaBoss','./assets/images/tilemaps/ArenaBoss.json');
+        this.load.tilemapTiledJSON('arenaFinal','./assets/images/tilemaps/ArenaFinal.json');
         //arena 2
         this.load.image('clouds','./assets/images/backgrounds/clouds.png');
         this.load.image('mist','./assets/images/backgrounds/mist.png');
         this.load.audio('playBGM','../assets/audio/bgm/playBGM.mp3');
         //enemies
-        this.load.spritesheet('seraphim','./assets/images/spritesheets/enemies/seraphim.png', { frameWidth: 180, frameHeight: 129 });
+        this.load.spritesheet('seraphim','./assets/images/spritesheets/enemies/Seraphim/seraphim.png', { frameWidth: 180, frameHeight: 129 });
+        this.load.spritesheet('seraphimBlue','./assets/images/spritesheets/enemies/Seraphim/seraphimBlue.png', { frameWidth: 180, frameHeight: 129 });
+        this.load.spritesheet('seraphimRed','./assets/images/spritesheets/enemies/Seraphim/seraphimRed.png', { frameWidth: 180, frameHeight: 129 });
+        this.load.spritesheet('seraphimYellow','./assets/images/spritesheets/enemies/Seraphim/seraphimYellow.png', { frameWidth: 180, frameHeight: 129 });
         this.load.spritesheet('seraProj','./assets/images/spritesheets/projectiles/seraproj.png', { frameWidth: 75, frameHeight: 75 });
+        this.load.spritesheet('throne','./assets/images/spritesheets/enemies/Throne/throne.png', { frameWidth: 135, frameHeight: 129 });
+        this.load.spritesheet('throneBlue','./assets/images/spritesheets/enemies/Throne/throneBlue.png', { frameWidth: 135, frameHeight: 129 });
+        this.load.spritesheet('throneRed','./assets/images/spritesheets/enemies/Throne/throneRed.png', { frameWidth: 135, frameHeight: 129 });
+        this.load.spritesheet('throneYellow','./assets/images/spritesheets/enemies/Throne/throneYellow.png', { frameWidth: 135, frameHeight: 129 });
     }
 
     create() {      //loading screen, transitions to Main Menu after the preloading

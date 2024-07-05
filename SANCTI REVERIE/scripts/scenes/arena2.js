@@ -8,10 +8,11 @@ export default class Arena2Scene extends Phaser.Scene {
         this.iKeyEnabled = true;
         this.playerInvulnerable = false;
         this.SeraphimSpawnRate = 10000;
+        this.ThroneSpawnRate = 5000;
     }
     create() {
         //tilemaps
-        this.map = this.make.tilemap({key:"arena2", tileWidth:32, tileHeight:32});
+        this.map = this.make.tilemap({key:"arenaFinal", tileWidth:32, tileHeight:32});
 
         // Calculate aspect ratio of the screen
         
@@ -37,10 +38,11 @@ export default class Arena2Scene extends Phaser.Scene {
         this.mist1 = this.add.tileSprite(0, 0, cloudsWidth, cloudsHeight, 'mist')
         .setOrigin(0.3, 0.5)
         .setScale(1).setAlpha(0.6);
-        this.tileset = this.map.addTilesetImage("GP Final Tilemap","arenaTile");
-        this.layer3 = this.map.createLayer("floor",this.tileset,0,0);
-        this.layer2 = this.map.createLayer("fences",this.tileset,0,0);
-        this.layer1 = this.map.createLayer("decorations",this.tileset,0,0);
+        this.tileset = this.map.addTilesetImage("arenatilemapupdated","arenaTile");
+        this.layer4 = this.map.createLayer("floor",this.tileset,0,0);
+        this.layer3 = this.map.createLayer("fences",this.tileset,0,0);
+        this.layer2 = this.map.createLayer("decorations",this.tileset,0,0);
+        this.layer1 = this.map.createLayer("decorations2",this.tileset,0,0);
 
         this.map.layers.forEach((layer) => {
             layer.tilemapLayer.scale = 2.4;
@@ -112,14 +114,14 @@ export default class Arena2Scene extends Phaser.Scene {
 
         this.anims.create({
             key: 'slashRight',
-            frames: this.anims.generateFrameNumbers('slashRight', { start: 0, end: 4 }),
+            frames: this.anims.generateFrameNumbers('slashRight', { start: 0, end: 5 }),
             frameRate: 16,
             repeat: 0
         });
 
         this.anims.create({
             key: 'slashDown',
-            frames: this.anims.generateFrameNumbers('slashDown', { start: 0, end: 4 }),
+            frames: this.anims.generateFrameNumbers('slashDown', { start: 0, end: 5 }),
             frameRate: 16,
             repeat: 0
         });
@@ -156,6 +158,9 @@ export default class Arena2Scene extends Phaser.Scene {
         //Seraphims (Seraphim)
         this.Seraphims = this.physics.add.group();
 
+        //Thrones (Throne)
+        this.Thrones = this.physics.add.group();
+
         this.time.addEvent({
             delay: this.SeraphimSpawnRate,
             callback: this.seraSpawn,
@@ -163,9 +168,72 @@ export default class Arena2Scene extends Phaser.Scene {
             loop: true
         });
 
+        this.time.addEvent({
+            delay: this.ThroneSpawnRate,
+            callback: this.throneSpawn,
+            callbackScope: this,
+            loop: true
+        });
+
+        this.time.addEvent({
+            delay: 1000,
+            callback: this.enableColliders,
+            callbackScope: this,
+            loop: true
+        });
+
         this.anims.create({
-            key: 'fly',
+            key: 'flyDefault',
             frames: this.anims.generateFrameNumbers('seraphim', { start: 0, end: 4 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'flyBlue',
+            frames: this.anims.generateFrameNumbers('seraphimBlue', { start: 0, end: 4 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'flyRed',
+            frames: this.anims.generateFrameNumbers('seraphimRed', { start: 0, end: 4 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'flyYellow',
+            frames: this.anims.generateFrameNumbers('seraphimYellow', { start: 0, end: 4 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'bounceDefault',
+            frames: this.anims.generateFrameNumbers('throne', { start: 0, end: 9 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'bounceBlue',
+            frames: this.anims.generateFrameNumbers('throneBlue', { start: 0, end: 9 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'bounceRed',
+            frames: this.anims.generateFrameNumbers('throneRed', { start: 0, end: 9 }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'bounceYellow',
+            frames: this.anims.generateFrameNumbers('throneYellow', { start: 0, end: 9 }),
             frameRate: 8,
             repeat: -1
         })
@@ -180,15 +248,15 @@ export default class Arena2Scene extends Phaser.Scene {
         this.seraProjs = this.physics.add.group();
 
         //tilemap collisions
-        this.layer2.setCollisionBetween(0, 200);
-        this.physics.add.collider(this.playerContainer.body, this.layer2);
-
+        this.layer3.setCollisionBetween(0, 200);
+        this.physics.add.collider(this.playerContainer.body, this.layer3);
+        this.physics.add.collider(this.Thrones, this.layer3, this.throneTileCollision, null, this);
         //collisions and damage
         this.physics.add.overlap(this.weapon, this.Seraphims, this.handlePlayerEnemyOverlap, null, this);
         this.physics.add.overlap(this.hitboxes, this.Seraphims, this.handlePlayerEnemyOverlap, null, this);
-        this.physics.add.collider(this.player, this.Seraphims, () => {
-            this.playerBounce(this.playerContainer, this.Seraphims);
-        }, null, this);
+        this.physics.add.overlap(this.weapon, this.Thrones, this.handlePlayerEnemyOverlap, null, this);
+        this.physics.add.overlap(this.hitboxes, this.Thrones, this.handlePlayerEnemyOverlap, null, this);
+        
         this.physics.add.overlap(this.player, this.seraProjs, (player, projectile) => {
                 this.playerBounce(this.playerContainer, projectile);
         });
@@ -287,16 +355,28 @@ export default class Arena2Scene extends Phaser.Scene {
             if (this.jkl.J.isDown  && this.currColor != 'blue') {
                 this.blueSFX.play();
                 this.weapon.setTint(0x0000ff); // Blue tint
+                this.slashRight.setTint(0x0000ff);
+                this.slashLeft.setTint(0x0000ff);
+                this.slashUp.setTint(0x0000ff);
+                this.slashDown.setTint(0x0000ff);
                 this.currColor = 'blue';
                 this.lastColorChangeTime = currentTime; // Update the last color change time
             } else if (this.jkl.K.isDown  && this.currColor !='red') {
                 this.redSFX.play();
                 this.weapon.setTint(0xff0000); // Red tint
+                this.slashRight.setTint(0xff0000);
+                this.slashLeft.setTint(0xff0000);
+                this.slashUp.setTint(0xff0000);
+                this.slashDown.setTint(0xff0000);
                 this.currColor = 'red';
                 this.lastColorChangeTime = currentTime; // Update the last color change time
             } else if (this.jkl.L.isDown && this.currColor != 'yellow') {
                 this.yellowSFX.play();
                 this.weapon.setTint(0xffff00); // Yellow tint
+                this.slashRight.setTint(0xffff00);
+                this.slashLeft.setTint(0xffff00);
+                this.slashUp.setTint(0xffff00);
+                this.slashDown.setTint(0xffff00);
                 this.currColor = 'yellow';
                 this.lastColorChangeTime = currentTime; // Update the last color change time
             }
@@ -313,7 +393,27 @@ export default class Arena2Scene extends Phaser.Scene {
 
         //enemies
         this.Seraphims.children.each((seraphim) => {
-            seraphim.anims.play('fly', true);
+            if(seraphim.col == 'default'){
+                seraphim.anims.play('flyDefault', true);
+            }else if(seraphim.col == 'blue'){
+                seraphim.anims.play('flyBlue', true);
+            }else if(seraphim.col == 'red'){
+                seraphim.anims.play('flyRed', true);
+            }else if(seraphim.col == 'yellow'){
+                seraphim.anims.play('flyYellow', true);
+            }
+        }, this);
+
+        this.Thrones.children.each((throne) => {
+            if(throne.col == 'default'){
+                throne.anims.play('bounceDefault', true);
+            }else if(throne.col == 'blue'){
+                throne.anims.play('bounceBlue', true);
+            }else if(throne.col == 'red'){
+                throne.anims.play('bounceRed', true);
+            }else if(throne.col == 'yellow'){
+                throne.anims.play('bounceYellow', true);
+            }
         }, this);
 
          // Remove projectiles that are out of the screen
@@ -339,6 +439,9 @@ export default class Arena2Scene extends Phaser.Scene {
         if (!enemy.isInvulnerable && enemy.active) {
             if (enemy.class === "seraphim") {
                 this.seraDamage(enemy, 1); // Adjust as per your damage function
+            }
+            else if(enemy.class === "throne"){
+                this.throneDamage(enemy,1);
             }
             enemy.setAlpha(0.5);
     
@@ -383,7 +486,7 @@ export default class Arena2Scene extends Phaser.Scene {
     }
 
     playerBounce(playerContainer, enemy) {
-        if(this.playerInvulnerable == false){
+        if(this.playerInvulnerable == false && enemy.active){
             if(enemy.class == "projectile"){
                 enemy.destroy();
             }
@@ -531,7 +634,7 @@ export default class Arena2Scene extends Phaser.Scene {
         const angle = Phaser.Math.Angle.BetweenPoints(seraphim, player);
     
         // Create a bullet at Seraphim's position
-        const projectile = this.seraProjs.create(seraphim.x, seraphim.y, 'seraProj').setOrigin(-0.55, -0.55).setScale(0.7);
+        const projectile = this.seraProjs.create(seraphim.x, seraphim.y, 'seraProj').setOrigin(-0.55, -0.55).setScale(0.5);
         projectile.anims.play('proj', true);
 
         projectile.class = "projectile";
@@ -549,85 +652,96 @@ export default class Arena2Scene extends Phaser.Scene {
         // Generate random x and y coordinates for the enemy spawn position
         const centerX = Phaser.Math.Between(200, 1300);
         let centerY;
-
+        let seraphimC;
+      
+        const tintChoice = Phaser.Math.Between(1, 4); // 1 = Red, 2 = Blue, 3 = Yellow, 4 = Uncolored (all colors vulne)
+        switch (tintChoice) {
+          case 1:
+            seraphimC = 'seraphimRed';
+            break;
+          case 2:
+            seraphimC = 'seraphimBlue';
+            break;
+          case 3:
+            seraphimC = 'seraphimYellow';
+            break;
+          case 4: // No tint
+            seraphimC = 'seraphim';
+            break;
+          default:
+            break;
+        }
+      
+        const seraphim = this.Seraphims.create(centerX, centerY, seraphimC).setOrigin(-0.02, 0.15).setScale(0.6);
+        seraphim.class = "seraphim";
+      
+        if (seraphimC === 'seraphim') {
+          seraphim.color = ['red', 'blue', 'yellow'];
+          seraphim.col = 'default';
+        } else if (seraphimC === 'seraphimRed') {
+          seraphim.color = ['red'];
+          seraphim.col = 'red';
+        } else if (seraphimC === 'seraphimBlue') {
+          seraphim.color = ['blue'];
+          seraphim.col = 'blue';
+        } else if (seraphimC === 'seraphimYellow') {
+          seraphim.color = ['yellow'];
+          seraphim.col = 'yellow';
+        }
+      
         // Randomly choose between different ranges
         const randomChoice = Phaser.Math.Between(1, 2); // Example: choose between 1 to 4
-
+      
         if (randomChoice === 1) {
-            centerY = Phaser.Math.Between(60, 100); // Range 1
-        } else if(randomChoice === 2) {
-            centerY = Phaser.Math.Between(600, 650); // Default or Range 4
+          centerY = Phaser.Math.Between(60, 100); // Range 1
+        } else if (randomChoice === 2) {
+          centerY = Phaser.Math.Between(600, 650); // Default or Range 4
         }
-    
+      
         // Generate a random radius for the circular path
         const radius = Phaser.Math.Between(50, 150); // Random radius between 50 and 150
-    
+      
         // Create a new enemy at the center position
-        const seraphim = this.Seraphims.create(centerX, centerY, 'seraphim').setOrigin(-0.02, 0.15).setScale(0.6);  
-        seraphim.class = "seraphim";
-    
-        const tintChoice = Phaser.Math.Between(1, 3); // 1 = Red, 2 = Blue, 3 = Yellow, 4 = Unclored (all colors vulne)
-    
-        // Apply tint based on random choice
-        switch (tintChoice) {
-            case 1:
-                seraphim.setTint(0xff0000); // Red tint
-                seraphim.color = ['red'];
-                break;
-            case 2:
-                seraphim.setTint(0x0000ff); // Blue tint
-                seraphim.color = ['blue'];
-                break;
-            case 3:
-                seraphim.setTint(0xffff00); // Yellow tint
-                seraphim.color = ['yellow'];
-                break;
-            case 4:             //No tint
-                seraphim.color = ['red','blue','yellow'];
-                break;
-            default:
-                break;
-        }
-
+        seraphim.setPosition(centerX, centerY);
+      
         seraphim.hp = 2;
-
+      
         seraphim.setActive(false).setAlpha(0.5);
         this.time.delayedCall(1000, () => {
-            seraphim.setActive(true).setAlpha(1);
+          seraphim.setActive(true).setAlpha(1);
         });
-    
+      
         // Set initial angle for circular movement
         let angle = Phaser.Math.DegToRad(Phaser.Math.Between(0, 360)); // Random initial angle
-    
+      
         this.time.addEvent({
-            delay: 50, // Adjust the delay to change speed of rotation
-            loop: true,
-            callback: () => {
-                // Calculate new position on the circular path
-                const x = centerX + radius * Math.cos(angle);
-                const y = centerY + radius * Math.sin(angle);
-    
-                // Update seraphim position
-                seraphim.setPosition(x, y);
-    
-                // Increment angle for next frame
-                angle += Phaser.Math.DegToRad(2.5); // Adjust angular speed (2 degrees per frame)
-            },
-            callbackScope: this
+          delay: 50, // Adjust the delay to change speed of rotation
+          loop: true,
+          callback: () => {
+            // Calculate new position on the circular path
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+      
+            // Update seraphim position
+            seraphim.setPosition(x, y);
+      
+            // Increment angle for next frame
+            angle += Phaser.Math.DegToRad(2.5); // Adjust angular speed (2 degrees per frame)
+          },
+          callbackScope: this
         });
-    
+      
         this.time.addEvent({
-            delay: 2500, 
-            loop: true,
-            callback: () => this.seraShoot(seraphim),
-            callbackScope: this,
-            loop: true
+          delay: 2500,
+          loop: true,
+          callback: () => this.seraShoot(seraphim),
+          callbackScope: this,
+          loop: true
         });
-    }
+      }
 
     seraDamage(seraphim, damageAmount) {
         seraphim.hp -= damageAmount;
-        console.log(seraphim.hp);
         if (seraphim.hp <= 0) {
             // Handle seraphim defeat or destruction
             this.destroySeraphim(seraphim);
@@ -636,5 +750,115 @@ export default class Arena2Scene extends Phaser.Scene {
     
     destroySeraphim(seraphim) {
         seraphim.destroy();
+    }
+
+    throneSpawn() {
+        // Generate random x and y coordinates for the throne spawn position
+        let centerX;
+        let centerY;
+        let throneC;
+        const randomVelocity = Phaser.Math.Between(80,200);
+    
+        const tintChoice = Phaser.Math.Between(1, 4); // 1 = Red, 2 = Blue, 3 = Yellow, 4 = Uncolored (all colors vulne)
+        switch (tintChoice) {
+            case 1:
+                throneC = 'throneRed';
+                break;
+            case 2:
+                throneC = 'throneBlue';
+                break;
+            case 3:
+                throneC = 'throneYellow';
+                break;
+            case 4: // No tint
+                throneC = 'throne';
+                break;
+            default:
+                break;
+        }
+
+        // Randomly choose between different ranges
+        const randomChoice = Phaser.Math.Between(1, 2); // Example: choose between 1 to 4
+    
+        if (randomChoice === 1) {
+            centerY = Phaser.Math.Between(200,550); // Range 1
+            centerX = Phaser.Math.Between(200, 1300);
+        } else if (randomChoice === 2) {
+            centerY = Phaser.Math.Between(1000, 1200); // Default or Range 4
+            centerX = Phaser.Math.Between(200, 700);
+        }
+
+        const throne = this.Thrones.create(centerX, centerY, throneC).setOrigin(-0.02, 0.15).setScale(0.75);
+        throne.setVelocity(randomVelocity,randomVelocity);
+        throne.setBounce(1);
+        throne.class = "throne";
+        throne.hp = 3;
+    
+        if (throneC === 'throne') {
+            throne.color = ['red', 'blue', 'yellow'];
+            throne.col = 'default';
+        } else if (throneC === 'throneRed') {
+            throne.color = ['red'];
+            throne.col = 'red';
+        } else if (throneC === 'throneBlue') {
+            throne.color = ['blue'];
+            throne.col = 'blue';
+        } else if (throneC === 'throneYellow') {
+            throne.color = ['yellow'];
+            throne.col = 'yellow';
+        }
+
+        throne.setActive(false).setAlpha(0.5);
+        this.time.delayedCall(1000, () => {
+          throne.setActive(true).setAlpha(1);
+        });
+    }
+
+    throneTileCollision(throne, tile) {
+        // Determine the direction of the collision
+        const isCollidingLeft = (tile.faceLeft && throne.body.touching.right);
+        const isCollidingRight = (tile.faceRight && throne.body.touching.left);
+        const isCollidingUp = (tile.faceTop && throne.body.touching.bottom);
+        const isCollidingDown = (tile.faceBottom && throne.body.touching.top);
+    
+        // Adjust velocity based on collision direction
+        let newVelocityX = throne.body.velocity.x;
+        let newVelocityY = throne.body.velocity.y;
+    
+        if (isCollidingLeft || isCollidingRight) {
+            newVelocityX *= -1; // Reverse X velocity
+        }
+    
+        if (isCollidingUp || isCollidingDown) {
+            newVelocityY *= -1; // Reverse Y velocity
+        }
+    
+        throne.setVelocity(newVelocityX, newVelocityY);
+    }
+
+    throneDamage(throne, damageAmount) {
+        throne.hp -= damageAmount;
+        if (throne.hp <= 0) {
+            // Handle throne defeat or destruction
+            this.destroyThrone(throne);
+        }
+    }
+
+    destroyThrone(throne) {
+        throne.destroy();
+    }
+
+    enableColliders(){
+        this.Seraphims.children.each((seraphim) => {
+            this.physics.add.collider(this.player, seraphim, () => {
+                this.playerBounce(this.playerContainer, seraphim);
+            }, null, this);
+        }, this);
+
+        this.Thrones.children.each((throne) => {
+            this.physics.add.overlap(this.player, throne, () => {
+                this.playerBounce(this.playerContainer, throne);
+            }, null, this);
+        }, this);
     }
 }
