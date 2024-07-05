@@ -1,4 +1,4 @@
-//main menu scene
+// main menu scene
 
 export default class MainMenuScene extends Phaser.Scene {
     constructor() {
@@ -13,8 +13,16 @@ export default class MainMenuScene extends Phaser.Scene {
         // Set the background image to cover the entire scene
         this.add.image(0, 0, 'mainMenuBackground').setOrigin(0);
 
-        // Add the game title image
-        this.add.image(750, 200, 'gameTitle').setOrigin(0.5);
+        // Add the game title image with bobbing effect
+        const gameTitle = this.add.image(750, 200, 'gameTitle').setOrigin(0.5);
+        this.add.tween({
+            targets: gameTitle,
+            y: 220, // Change to the desired range for bobbing
+            ease: 'Sine.easeInOut',
+            duration: 2000,
+            yoyo: true,
+            repeat: -1
+        });
 
         // Create buttons with hover states
         this.createButton(750, 480, 'launch', 'launchhover', 'Arena2Scene');
@@ -79,4 +87,3 @@ export default class MainMenuScene extends Phaser.Scene {
         });
     }
 }
-
