@@ -33,13 +33,13 @@ export default class CredScene extends Phaser.Scene {
             fill: '#d7a04c',
         }).setOrigin(0.5);
 
-        this.add.text(750, 480, 'Justin Kyle De Castro', {
+        this.add.text(750, 480, 'Lawrenzo Andrey Baldove', {
             fontSize: '18px',
             fontFamily: 'antiquity',
             fill: '#d7a04c',
         }).setOrigin(0.5);
 
-        this.add.text(750, 530, 'Lawrenzo Andrey Baldove', {
+        this.add.text(750, 530, 'Justin Kyle De Castro', {
             fontSize: '18px',
             fontFamily: 'antiquity',
             fill: '#d7a04c',
