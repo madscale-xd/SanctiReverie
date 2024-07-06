@@ -226,7 +226,7 @@ export default class Arena2Scene extends Phaser.Scene {
         });
 
         this.time.addEvent({
-            delay: 1800000,
+            delay: 180000,
             callback: this.spawnEligiusCutscene,
             callbackScope: this
         });
@@ -409,7 +409,7 @@ export default class Arena2Scene extends Phaser.Scene {
         this.orb2.setVisible(false);
 
         this.orbRadius = 200; // Radius of the orbit
-        this.orbSpeed = 0.02; // Speed of the orbit (radians per frame)
+        this.orbSpeed = 0.015; // Speed of the orbit (radians per frame)
         this.orbAngle1 = 0; // Initial angle for orb1
         this.orbAngle2 = Math.PI; // Initial angle for orb2 (opposite to orb1)
         
@@ -976,6 +976,10 @@ export default class Arena2Scene extends Phaser.Scene {
         this.scoreText.setText('Score: ' + this.score);
     }
 
+    destroySeraphimNoScore(seraphim) {
+        seraphim.destroy();
+    }
+
     throneSpawn() {
         // Generate random x and y coordinates for the throne spawn position
         let centerX;
@@ -1074,6 +1078,10 @@ export default class Arena2Scene extends Phaser.Scene {
         this.scoreText.setText('Score: ' + this.score);
     }
 
+    destroyThroneNoScore(throne) {
+        throne.destroy();
+    }
+
     enableColliders(){
         this.Seraphims.children.each((seraphim) => {
             this.physics.add.collider(this.player, seraphim, () => {
@@ -1118,11 +1126,11 @@ export default class Arena2Scene extends Phaser.Scene {
         
         this.time.delayedCall(8000, () => {
             this.Seraphims.children.each((seraphim) => {
-                this.destroySeraphim(seraphim);
+                this.destroySeraphimNoScore(seraphim);
             }, this);
     
             this.Thrones.children.each((throne) => {
-                this.destroyThrone(throne);
+                this.destroyThroneNoScore(throne);
             }, this);
             this.bossBGM.play();
             this.controlsEnabled = true;
