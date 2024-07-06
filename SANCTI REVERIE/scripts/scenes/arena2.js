@@ -20,6 +20,7 @@ export default class Arena2Scene extends Phaser.Scene {
     }
     create() {
         //reset
+        this.currColor = "blue";
         this.currDir = "none";
         this.lastColorChangeTime = -3000; // Track the last time the color was changed
         this.uKeyEnabled = true;
@@ -181,6 +182,43 @@ export default class Arena2Scene extends Phaser.Scene {
             repeat: 0
         });
 
+        
+
+        this.anims.create({
+            key: 'heart5',
+            frames: this.anims.generateFrameNumbers('heart', { start: 0, end: 0 }),
+            frameRate: 4,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'heart4',
+            frames: this.anims.generateFrameNumbers('heart', { start: 1, end: 1 }),
+            frameRate: 4,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'heart3',
+            frames: this.anims.generateFrameNumbers('heart', { start: 2, end: 2 }),
+            frameRate: 4,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'heart2',
+            frames: this.anims.generateFrameNumbers('heart', { start: 3, end: 3 }),
+            frameRate: 4,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'heart1',
+            frames: this.anims.generateFrameNumbers('heart', { start: 4, end: 4}),
+            frameRate: 4,
+            repeat: -1
+        })
+
         this.weapon = this.physics.add.sprite(30,0, 'swordd').setScale(0.5).setOrigin(-0.1, -0.15);
         this.weapon.anims.play('weaponBlue');
         this.playerContainer.add(this.weapon);
@@ -207,14 +245,20 @@ export default class Arena2Scene extends Phaser.Scene {
         this.cameras.main.startFollow(this.playerContainer);
         this.cameras.main.setZoom(1.65);// 1.65 as default;
 
-        this.scoreText = this.add.text(340, 160, 'Score: 0', { fontFamily: 'Arial', fontSize: 20,  
+        this.scoreText = this.add.text(1040, 160, 'Score: 0', { fontFamily: 'Arial', fontSize: 20,  
             fill: '#f4cfaf', 
             stroke: '#863e45',
             strokeThickness: 4}).setOrigin(0);
+        
+        this.portrait = this.add.image(320,160,'portrait').setScale(0.4);
+        this.hearts = this.add.sprite(465,160,'heart').setScale(0.3);
+        this.hearts.anims.play('heart5');
     
-            this.uiContainer = this.add.container(50, 50);
-            this.uiContainer.add(this.scoreText);
-            this.uiContainer.setScrollFactor(0);
+        this.uiContainer = this.add.container(50, 50);
+        this.uiContainer.add(this.scoreText);
+        this.uiContainer.add(this.hearts);
+        this.uiContainer.add(this.portrait);
+        this.uiContainer.setScrollFactor(0);
 
         this.hitboxes = this.physics.add.group();
 
@@ -655,6 +699,15 @@ export default class Arena2Scene extends Phaser.Scene {
         this.orb2.x = this.eligius.x + this.orbRadius * Math.cos(this.orbAngle2);
         this.orb2.y = this.eligius.y + this.orbRadius * Math.sin(this.orbAngle2);
 
+        if (this.playerHp == 4){
+            this.hearts.anims.play('heart4');
+        }else if(this.playerHp == 3){
+            this.hearts.anims.play('heart3');
+        }else if(this.playerHp == 2){
+            this.hearts.anims.play('heart2');
+        }else if(this.playerHp == 1){
+            this.hearts.anims.play('heart1');
+        }
     }
 
     handlePlayerEnemyOverlap(player, enemy) {

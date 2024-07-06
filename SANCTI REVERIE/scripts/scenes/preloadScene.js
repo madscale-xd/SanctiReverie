@@ -9,11 +9,14 @@ export default class PreloadScene extends Phaser.Scene {
     preload(){
         //testgame (player stuff)
         this.load.spritesheet('player', '../assets/images/spritesheets/Sancti_Spritesheet.png', { frameWidth: 59, frameHeight: 86 });
+        this.load.spritesheet('heart', '../assets/images/spritesheets/heartSprite.png', { frameWidth: 615, frameHeight: 123 });
         this.load.spritesheet('slashRight', '../assets/images/spritesheets/slashes/slashRight.png', { frameWidth: 48, frameHeight: 96 });
         this.load.spritesheet('slashLeft', '../assets/images/spritesheets/slashes/slashLeft.png', { frameWidth: 48, frameHeight: 96 });
         this.load.spritesheet('slashUp', '../assets/images/spritesheets/slashes/slashUp.png', { frameWidth: 96, frameHeight: 48 });
         this.load.spritesheet('slashDown', '../assets/images/spritesheets/slashes/slashDown.png', { frameWidth: 96, frameHeight: 48 });
         this.load.image('sword', '../assets/images/spritesheets/sword.png');
+        this.load.image('portrait', '../assets/images/spritesheets/portrait.png');
+        this.load.image('scoreBar', '../assets/images/spritesheets/scoreBar.png');
         this.load.spritesheet('swordd', '../assets/images/spritesheets/swordd.png', {frameWidth: 54, frameHeight: 252});
         this.load.audio('dashSFX','../assets/audio/sfx/dashSFX.mp3');
         this.load.audio('slashSFX','../assets/audio/sfx/slashSFX.mp3');
