@@ -245,20 +245,24 @@ export default class Arena2Scene extends Phaser.Scene {
         this.cameras.main.startFollow(this.playerContainer);
         this.cameras.main.setZoom(1.65);// 1.65 as default; ZOOM
 
-        this.scoreText = this.add.text(1040, 160, 'Score: 0', { fontFamily: 'Arial', fontSize: 20,  
-            fill: '#f4cfaf', 
-            stroke: '#863e45',
-            strokeThickness: 4}).setOrigin(0);
-        
-        this.portrait = this.add.image(320,160,'portrait').setScale(0.4);
-        this.hearts = this.add.sprite(465,160,'heart').setScale(0.3);
+        // Adding the score text and score bar with correct depths
+        this.scorebar = this.add.image(1050, 210, 'scorebar').setScale(0.8).setDepth(5).setScrollFactor(0);
+        this.scoreText = this.add.text(990, 200, 'Score: 0', { 
+            fontFamily: 'antiquity', 
+            fontSize: '18px',  
+            fill: '#fbeae3', 
+        }).setOrigin(0).setDepth(10).setScrollFactor(0);
+
+        this.portrait = this.add.image(320, 160, 'portrait').setScale(0.4).setDepth(1);
+        this.hearts = this.add.sprite(465, 160, 'heart').setScale(0.3).setDepth(1);
         this.hearts.anims.play('heart5');
-    
+
+        // Creating the UI container and adding elements to it
         this.uiContainer = this.add.container(50, 50);
-        this.uiContainer.add(this.scoreText);
         this.uiContainer.add(this.hearts);
         this.uiContainer.add(this.portrait);
-        this.uiContainer.setScrollFactor(0);
+        this.uiContainer.setDepth(10).setScrollFactor(0);
+
 
         this.hitboxes = this.physics.add.group();
 
@@ -618,7 +622,7 @@ export default class Arena2Scene extends Phaser.Scene {
 
         //player color
         if(this.playerInvulnerable == true){
-            this.player.setAlpha(0.5);
+            this.player.setAlpha(0.5); 
         }
 
         //enemies
@@ -1232,10 +1236,9 @@ export default class Arena2Scene extends Phaser.Scene {
             this.seraProjs.add(this.orb2);
             this.orb1.setVisible(true);
             this.orb2.setVisible(true);
-            this.bossText = this.add.text(490,500, 'Eligius, Saint of Stones', { fontFamily: 'Arial', fontSize: 40,  
-                fill: '#f4cfaf', 
-                stroke: '#863e45',
-                strokeThickness: 4}).setOrigin(0);
+            this.bossText = this.add.text(550,500, 'Eligius, Saint of Stones', { fontFamily: 'antiquity', fontSize: '24px',  
+                fill: '#fbeae3', 
+            }).setOrigin(0);
             this.uiContainer.add(this.bossText);
         })
     }

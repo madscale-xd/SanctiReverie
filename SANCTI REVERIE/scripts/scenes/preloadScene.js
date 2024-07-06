@@ -16,7 +16,8 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('slashDown', '../assets/images/spritesheets/slashes/slashDown.png', { frameWidth: 96, frameHeight: 48 });
         this.load.image('sword', '../assets/images/spritesheets/sword.png');
         this.load.image('portrait', '../assets/images/spritesheets/portrait.png');
-        this.load.image('scoreBar', '../assets/images/spritesheets/scoreBar.png');
+        this.load.image('scorebar', '../assets/images/spritesheets/scoreBar.png');
+        this.load.image('plainborder', '../assets/images/ui/background/plainborder.png');
         this.load.spritesheet('swordd', '../assets/images/spritesheets/swordd.png', {frameWidth: 54, frameHeight: 252});
         this.load.audio('dashSFX','../assets/audio/sfx/dashSFX.mp3');
         this.load.audio('slashSFX','../assets/audio/sfx/slashSFX.mp3');
@@ -115,7 +116,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.time.delayedCall(3000, () => {
             this.loadingText.destroy();
             loadingSprite.destroy();
-            this.scene.start('MainMenuScene');
+            this.scene.start('Arena2Scene');
         }, [], this);
     }
 }
