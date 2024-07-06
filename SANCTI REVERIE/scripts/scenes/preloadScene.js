@@ -14,10 +14,12 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('slashUp', '../assets/images/spritesheets/slashes/slashUp.png', { frameWidth: 96, frameHeight: 48 });
         this.load.spritesheet('slashDown', '../assets/images/spritesheets/slashes/slashDown.png', { frameWidth: 96, frameHeight: 48 });
         this.load.image('sword', '../assets/images/spritesheets/sword.png');
+        this.load.spritesheet('swordd', '../assets/images/spritesheets/swordd.png', {frameWidth: 54, frameHeight: 252});
         this.load.audio('dashSFX','../assets/audio/sfx/dashSFX.mp3');
         this.load.audio('slashSFX','../assets/audio/sfx/slashSFX.mp3');
         this.load.audio('painSFX','../assets/audio/sfx/painSFX.mp3');
         this.load.audio('fireballSFX','../assets/audio/sfx/fireballSFX.mp3');
+        this.load.audio('laserSFX','../assets/audio/sfx/laserSFX.mp3');
         this.load.audio('blueSFX','../assets/audio/sfx/blueSFX.mp3');
         this.load.audio('redSFX','../assets/audio/sfx/redSFX.mp3');
         this.load.audio('yellowSFX','../assets/audio/sfx/yellowSFX.mp3');
@@ -72,13 +74,13 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('throneRed','./assets/images/spritesheets/enemies/Throne/throneRed.png', { frameWidth: 135, frameHeight: 129 });
         this.load.spritesheet('throneYellow','./assets/images/spritesheets/enemies/Throne/throneYellow.png', { frameWidth: 135, frameHeight: 129 });
         this.load.spritesheet('eligius','./assets/images/spritesheets/enemies/Boss/eligius.png', { frameWidth: 225, frameHeight: 396 });
-        this.load.spritesheet('candleblue','./assets/images/spritesheets/enemies/Boss/Candle/candleblue.png', { frameWidth: 162, frameHeight: 240 });
-        this.load.spritesheet('candlered','./assets/images/spritesheets/enemies/Boss/Candle/candlered.png', { frameWidth: 162, frameHeight: 240 });
+        this.load.spritesheet('candleblue','./assets/images/spritesheets/enemies/Boss/Candle/withEmpty/candleblue.png', { frameWidth: 162, frameHeight: 207 });
+        this.load.spritesheet('candlered','./assets/images/spritesheets/enemies/Boss/Candle/withEmpty/candlered.png', { frameWidth: 162, frameHeight: 207 });
         this.load.audio('destructionSFX','../assets/audio/sfx/destructionSFX.mp3');
-        this.load.spritesheet('candleyellow','./assets/images/spritesheets/enemies/Boss/Candle/candleyellow.png', { frameWidth: 162, frameHeight: 240 });
+        this.load.spritesheet('candleyellow','./assets/images/spritesheets/enemies/Boss/Candle/withEmpty/candleyellow.png', { frameWidth: 162, frameHeight: 207 });
         this.load.spritesheet('handAttack','./assets/images/spritesheets/enemies/Boss/HandAttack/BossHandSprite.png', { frameWidth: 132, frameHeight: 207 });
-        this.load.spritesheet('bossLaser','./assets/images/spritesheets/enemies/Boss/LaserAttack/BossLaserSheet.png', { frameWidth: 45, frameHeight: 975 });
-        this.load.spritesheet('bossOrb','./assets/images/spritesheets/enemies/Boss/LaserAttack/BossOrbSheet.png', { frameWidth: 75, frameHeight: 105 });
+        this.load.spritesheet('bossLaser','./assets/images/spritesheets/enemies/Boss/LaserAttack/withEmpty/BossLaserSheet.png', { frameWidth: 45, frameHeight: 975 });
+        this.load.spritesheet('bossOrb','./assets/images/spritesheets/enemies/Boss/LaserAttack/withEmpty/BossOrbSheet.png', { frameWidth: 75, frameHeight: 105 });
     }
 
     create() {      //loading screen, transitions to Main Menu after the preloading

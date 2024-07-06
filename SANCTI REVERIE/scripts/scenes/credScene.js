@@ -45,7 +45,7 @@ export default class CredScene extends Phaser.Scene {
             fill: '#d7a04c',
         }).setOrigin(0.5);
 
-        this.add.text(750, 580, 'Stephanie Pearl Virudazo', {
+        this.add.text(750, 580, 'Stephanie Pearl Virtudazo', {
             fontSize: '18px',
             fontFamily: 'antiquity',
             fill: '#d7a04c',

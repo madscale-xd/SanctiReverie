@@ -53,7 +53,7 @@ export default class GameOverScene extends Phaser.Scene {
         retry.setInteractive().on('pointerdown', () => {
             this.clickSFX.play();
             this.scene.pause();
-            this.scene.start('TestScene');
+            this.scene.start('Arena2Scene');
          });
  
         //menu button event listeners and interactivity (brings you to main menu)
