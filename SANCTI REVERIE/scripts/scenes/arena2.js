@@ -16,8 +16,27 @@ export default class Arena2Scene extends Phaser.Scene {
         this.score = 0;
         this.scoreText;
         this.playerHp = 5;
+        this.destructionSFXPlayed = false;
     }
     create() {
+        //reset
+        this.currDir = "none";
+        this.lastColorChangeTime = -3000; // Track the last time the color was changed
+        this.uKeyEnabled = true;
+        this.iKeyEnabled = true;
+        this.playerInvulnerable = false;
+        this.SeraphimSpawnRate = 20000;        
+        this.ThroneSpawnRate = 5000;
+        this.handSpawnRate = 100000;            //set to 500 at cutscene
+        this.controlsEnabled = true;
+        this.eligiusMovable = false;
+        this.orbSpawnRate = 8000;
+        this.score = 0;
+        this.scoreText;
+        this.playerHp = 5;
+        this.isBouncing = false;
+        this.isDashing = false;
+        this.destructionSFXPlayed = false;
         //tilemaps
         this.map = this.make.tilemap({key:"arenaFinal", tileWidth:32, tileHeight:32});
 
@@ -226,7 +245,7 @@ export default class Arena2Scene extends Phaser.Scene {
         });
 
         this.time.addEvent({
-            delay: 180000,
+            delay: 2000,
             callback: this.spawnEligiusCutscene,
             callbackScope: this
         });
