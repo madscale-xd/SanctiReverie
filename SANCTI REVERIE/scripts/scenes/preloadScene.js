@@ -30,22 +30,23 @@ export default class PreloadScene extends Phaser.Scene {
         //menuscene
         this.load.image('mainMenuBackground', '../assets/images/ui/background/mainmenu(1500x750).png');
         this.load.image('gameTitle', '../assets/images/ui/title.png');
-
         this.load.image('launch', '../assets/images/ui/buttons/start.png');
         this.load.image('launchhover', '../assets/images/ui/buttons/starthover.png');
         this.load.image('about', '../assets/images/ui/buttons/about.png');
         this.load.image('abouthover', '../assets/images/ui/buttons/abouthover.png');
         this.load.image('exit', '../assets/images/ui/buttons/exit.png');
         this.load.image('exithover', '../assets/images/ui/buttons/exithover.png');
-
+        this.load.image('retry', '../assets/images/ui/buttons/retry.png');
+        this.load.image('retryhover', '../assets/images/ui/buttons/retryhover.png');
         this.load.audio('clickSFX','../assets/audio/sfx/clickSFX.mp3');
         this.load.audio('hoverSFX','../assets/audio/sfx/hoverSFX.mp3');
         //credscene
         this.load.image('back', '../assets/images/ui/buttons/backbutton.png');
         this.load.image('backhover', '../assets/images/ui/buttons/backbuttonhover.png');
+        //loadingscene
+        this.load.spritesheet('gameloading', '../assets/images/ui/loading.png', { frameWidth: 95, frameHeight: 95 });
         //gameoverscene
         this.load.image('gameover','../assets/images/img/gameover.png');
-        this.load.image('retry','../assets/images/buttons/retry.png');
         this.load.image('stepback','../assets/images/buttons/stepback.png');
         //gamewinscene
         this.load.image('gamewin','../assets/images/img/gamewin.png');
@@ -83,22 +84,34 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('bossOrb','./assets/images/spritesheets/enemies/Boss/LaserAttack/withEmpty/BossOrbSheet.png', { frameWidth: 75, frameHeight: 105 });
     }
 
-    create() {      //loading screen, transitions to Main Menu after the preloading
+    create() {
+        this.cameras.main.setBackgroundColor('#fbeae3');
+        // Loading screen, transitions to Main Menu after preloading
         this.loadingText = this.add.text(750, 360, 'Lunging into the dungeon...', { 
-            fontSize: '85px', 
-            fill: '#f4cfaf', 
-            stroke: '#863e45',
-            strokeThickness: 20, 
-            fontFamily: 'Arial'
+            fontSize: '72px', 
+            fill: '#d7a04c', 
+            fontFamily: 'antiquity'
         }).setOrigin(0.5).setAlpha(1);
 
         this.time.delayedCall(2000, () => {
             this.loadingText.setAlpha(0);
         }, [], this);
 
-        //change this to test whichever stage
+        // Create and start the loading sprite animation
+        this.anims.create({
+            key: 'loading',
+            frames: this.anims.generateFrameNumbers('gameloading', { start: 0, end: 3 }),
+            frameRate: 2,
+            repeat: -1
+        });
+        
+        const loadingSprite = this.add.sprite(1400, 670, 'gameloading').setOrigin(0.5);
+        loadingSprite.play('loading');
+
+        // Change this to test whichever stage
         this.time.delayedCall(3000, () => {
             this.loadingText.destroy();
+            loadingSprite.destroy();
             this.scene.start('MainMenuScene');
         }, [], this);
     }
