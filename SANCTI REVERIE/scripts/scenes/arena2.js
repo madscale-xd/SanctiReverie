@@ -243,7 +243,7 @@ export default class Arena2Scene extends Phaser.Scene {
         this.uiop = this.input.keyboard.addKeys('U,I,O,P');
 
         this.cameras.main.startFollow(this.playerContainer);
-        this.cameras.main.setZoom(1.65);// 1.65 as default;
+        this.cameras.main.setZoom(1.65);// 1.65 as default; ZOOM
 
         this.scoreText = this.add.text(1040, 160, 'Score: 0', { fontFamily: 'Arial', fontSize: 20,  
             fill: '#f4cfaf', 
@@ -1232,6 +1232,11 @@ export default class Arena2Scene extends Phaser.Scene {
             this.seraProjs.add(this.orb2);
             this.orb1.setVisible(true);
             this.orb2.setVisible(true);
+            this.bossText = this.add.text(490,500, 'Eligius, Saint of Stones', { fontFamily: 'Arial', fontSize: 40,  
+                fill: '#f4cfaf', 
+                stroke: '#863e45',
+                strokeThickness: 4}).setOrigin(0);
+            this.uiContainer.add(this.bossText);
         })
     }
 
