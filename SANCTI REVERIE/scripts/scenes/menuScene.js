@@ -9,6 +9,11 @@ export default class MainMenuScene extends Phaser.Scene {
         // sfx
         this.clickSFX = this.sound.add('clickSFX', { volume: 0.8 });
         this.hoverSFX = this.sound.add('hoverSFX', { volume: 0.8 });
+
+        if (!this.startBGM || !this.startBGM.isPlaying) { //prevent bgm from duplicating
+            this.startBGM = this.sound.add('startBGM', { volume: 0.4, loop: true });
+            this.startBGM.play();
+        }
         
         // Set the background image to cover the entire scene
         this.add.image(0, 0, 'mainMenuBackground').setOrigin(0);

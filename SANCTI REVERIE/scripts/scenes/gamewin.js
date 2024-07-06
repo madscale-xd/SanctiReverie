@@ -9,6 +9,8 @@ export default class GameWinScene extends Phaser.Scene {
         this.sound.stopAll();
         this.clickSFX = this.sound.add('clickSFX', { volume: 0.8 });
         this.hoverSFX = this.sound.add('hoverSFX', { volume: 0.8 });
+        this.winBGM = this.sound.add('winBGM', {volume: 0.4, loop:true});
+        this.winBGM.play();
 
         this.add.image(0, 0, 'mainMenuBackground').setOrigin(0);
         this.finalScore = data.score;
@@ -60,6 +62,7 @@ export default class GameWinScene extends Phaser.Scene {
         button.on('pointerdown', () => {
             this.clickSFX.play();
             this.scene.pause();
+            this.winBGM.stop();
             this.scene.start(sceneKey);
         });
 
@@ -78,6 +81,7 @@ export default class GameWinScene extends Phaser.Scene {
         buttonHover.on('pointerdown', () => {
             this.clickSFX.play();
             this.scene.pause();
+            this.winBGM.stop();
             this.scene.start(sceneKey);
         });
     }

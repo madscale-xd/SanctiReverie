@@ -20,6 +20,7 @@ export default class Arena2Scene extends Phaser.Scene {
     }
     create() {
         //reset
+        this.sound.stopAll();
         this.currColor = "blue";
         this.currDir = "none";
         this.lastColorChangeTime = -3000; // Track the last time the color was changed
@@ -293,7 +294,7 @@ export default class Arena2Scene extends Phaser.Scene {
         });
 
         this.time.addEvent({
-            delay: 2000,
+            delay: 120000,
             callback: this.spawnEligiusCutscene,
             callbackScope: this
         });

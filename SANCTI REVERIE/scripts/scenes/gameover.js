@@ -9,6 +9,8 @@ export default class GameOverScene extends Phaser.Scene {
         this.sound.stopAll(); // Stops EVERYTHING from the previous scene (especially stepSFX)
         this.clickSFX = this.sound.add('clickSFX', { volume: 0.8 });
         this.hoverSFX = this.sound.add('hoverSFX', { volume: 0.8 });
+        this.loseBGM = this.sound.add('loseBGM', {volume: 0.4, loop:true});
+        this.loseBGM.play();
 
         // Delay the music AND game over screen for dramatic effect
         this.add.image(0, 0, 'mainMenuBackground').setOrigin(0);
@@ -59,6 +61,7 @@ export default class GameOverScene extends Phaser.Scene {
 
         button.on('pointerdown', () => {
             this.clickSFX.play();
+            this.loseBGM.stop();
             this.scene.start(sceneKey);
         });
 
@@ -76,6 +79,7 @@ export default class GameOverScene extends Phaser.Scene {
 
         buttonHover.on('pointerdown', () => {
             this.clickSFX.play();
+            this.loseBGM.stop();
             this.scene.start(sceneKey);
         });
     }

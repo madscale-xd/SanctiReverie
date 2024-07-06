@@ -68,6 +68,9 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('mist','./assets/images/backgrounds/mist.png');
         this.load.audio('playBGM','../assets/audio/bgm/playBGM.mp3');
         this.load.audio('bossBGM','../assets/audio/bgm/bossBGM.mp3');
+        this.load.audio('winBGM','../assets/audio/bgm/winBGM.mp3');
+        this.load.audio('loseBGM','../assets/audio/bgm/loseBGM.mp3');
+        this.load.audio('startBGM','../assets/audio/bgm/startBGM.mp3');
         //enemies
         this.load.spritesheet('seraphim','./assets/images/spritesheets/enemies/Seraphim/seraphim.png', { frameWidth: 180, frameHeight: 129 });
         this.load.spritesheet('seraphimBlue','./assets/images/spritesheets/enemies/Seraphim/seraphimBlue.png', { frameWidth: 180, frameHeight: 129 });
@@ -91,7 +94,7 @@ export default class PreloadScene extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor('#fbeae3');
         // Loading screen, transitions to Main Menu after preloading
-        this.loadingText = this.add.text(750, 360, 'Lunging into the dungeon...', { 
+        this.loadingText = this.add.text(750, 360, 'Opening the Gates...', { 
             fontSize: '72px', 
             fill: '#d7a04c', 
             fontFamily: 'antiquity'
@@ -116,7 +119,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.time.delayedCall(3000, () => {
             this.loadingText.destroy();
             loadingSprite.destroy();
-            this.scene.start('Arena2Scene');
+            this.scene.start('MainMenuScene');
         }, [], this);
     }
 }
